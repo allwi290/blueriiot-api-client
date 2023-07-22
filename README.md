@@ -15,7 +15,7 @@ api.init().then(function(){
     //api.getBlueDevice(process.env.BLUEID).then(function(data){console.log(data);});
     //api.getSwimmingPools().then(function(data){console.log(data);});
     //api.getSwimmingPool(process.env.POOLID).then(function(data){console.log(data);});
-    //api.getSwimmingPoolStatus(process.env.POOLID).then(function(data){console.log(data);});
+    // DEPECREATED api.getSwimmingPoolStatus(process.env.POOLID).then(function(data){console.log(data);});
     //api.getSwimmingPoolBlueDevices(process.env.POOLID).then(function(data){console.log(data);});
     //api.getSwimmingPoolFeed(process.env.POOLID, "en").then(function(data){console.log(data);});
     //api.getLastMeasurements(process.env.POOLID,process.env.BLUEID).then(function(data){console.log(data);})
@@ -35,7 +35,7 @@ getUser()
 getBlueDevice(<blue_device_serial>)
 getSwimmingPools()
 getSwimmingPool(<swimming_pool_id>)
-getSwimmingPoolStatus(<swimming_pool_id>)
+getSwimmingPoolStatus(<swimming_pool_id>) // DEPECREATED
 getSwimmingPoolBlueDevices(<swimming_pool_id>)
 getSwimmingPoolFeed(<swimming_pool_id>,<language>)
 getLastMeasurements(<swimming_pool_id>,<blue_device_serial>)
