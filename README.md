@@ -5,28 +5,30 @@ This is an unofficial node js wrapper for the Blueriiot API
 Example to fetch all pools
 
 ```javascript
-const {BlueriiotAPI} = require('./api');
-var api = new BlueriiotAPI(process.env.EMAIL,process.env.PASSWORD);
-api.init().then(function(){
-    console.log(api.isAuthenticated());
-    api.getSwimmingPools().then(function(data){console.log(data);});
-    
-    //api.getUser().then(function(data){console.log(data);});
-    //api.getBlueDevice(process.env.BLUEID).then(function(data){console.log(data);});
-    //api.getSwimmingPools().then(function(data){console.log(data);});
-    //api.getSwimmingPool(process.env.POOLID).then(function(data){console.log(data);});
-    // DEPECREATED api.getSwimmingPoolStatus(process.env.POOLID).then(function(data){console.log(data);});
-    //api.getSwimmingPoolBlueDevices(process.env.POOLID).then(function(data){console.log(data);});
-    //api.getSwimmingPoolFeed(process.env.POOLID, "en").then(function(data){console.log(data);});
-    //api.getLastMeasurements(process.env.POOLID,process.env.BLUEID).then(function(data){console.log(data);})
-    //api.getGuidance(process.env.POOLID, "en").then(function(data){console.log(data);});
-    //api.getGuidanceHistory(process.env.POOLID, "en").then(function(data){console.log(data);});
-    //api.getChemistry(process.env.POOLID).then(function(data){console.log(data);});
-    //api.getWeather(process.env.POOLID, "en").then(function(data){console.log(data);});
-    //api.getBlueDeviceCompatibility(process.env.BLUEID).then(function(data){console.log(data);});
-}).catch( function(error){
-    console.log("We have issues signing in: " + error);
-});
+import 'dotenv/config';
+import { BlueriiotAPI } from './api.mjs';
+import { logger } from './logger.mjs';
+const api = new BlueriiotAPI(process.env.EMAIL, process.env.PASSWORD);
+api.authenticate()
+    .then(async () => {
+        logger.debug('Authentication success!');
+    })
+    .catch((error) => {
+        logger.error(`Authentication failed! ${error.message}`);
+    });
+//logger.log(await api.getUser());
+//logger.log(await api.getBlueDevice(process.env.BLUEID));
+//logger.log(await api.getSwimmingPools());
+//logger.log(await api.getSwimmingPool(process.env.POOLID));
+// DEPECREATED logger.log(await api.getSwimmingPoolStatus(process.env.POOLID));
+//logger.log(await api.getSwimmingPoolBlueDevices(process.env.POOLID));
+//logger.log(await api.getSwimmingPoolFeed(process.env.POOLID, 'en'));
+//logger.log(await api.getLastMeasurements(process.env.POOLID, process.env.BLUEID));
+//logger.log(await api.getGuidance(process.env.POOLID, 'en'));
+//logger.log(await api.getGuidanceHistory(process.env.POOLID, 'en'));
+//logger.log(await api.getChemistry(process.env.POOLID));
+//logger.log(await api.getWeather(process.env.POOLID, 'se'));
+//logger.log(await api.getBlueDeviceCompatibility(process.env.BLUEID));
 ```
 
 ## End Points
@@ -35,7 +37,7 @@ getUser()
 getBlueDevice(<blue_device_serial>)
 getSwimmingPools()
 getSwimmingPool(<swimming_pool_id>)
-getSwimmingPoolStatus(<swimming_pool_id>) // DEPECREATED
+// DEPECREATED getSwimmingPoolStatus(<swimming_pool_id>)
 getSwimmingPoolBlueDevices(<swimming_pool_id>)
 getSwimmingPoolFeed(<swimming_pool_id>,<language>)
 getLastMeasurements(<swimming_pool_id>,<blue_device_serial>)
@@ -43,7 +45,7 @@ getGuidance(<swimming_pool_id>,<language>)
 getGuidanceHistory(<swimming_pool_id>,<language>)
 getChemistry(<swimming_pool_id>)
 getWeather(<swimming_pool_id>,<language>)
-etBlueDeviceCompatibility(<blue_device_serial>)
+getBlueDeviceCompatibility(<blue_device_serial>)
 ```
 
 ## Test

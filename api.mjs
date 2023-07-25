@@ -20,10 +20,6 @@ export class BlueriiotAPI {
         this.token = '';
     }
 
-    async init() {
-        await this.getToken();
-    }
-
     getToken = async () => {
         const config = { invokeUrl: BASE_URL };
         const apigClient = newClient(config);
@@ -56,44 +52,39 @@ export class BlueriiotAPI {
     };
 
     getData = async (pathParams, pathTemplate, queryParams) => {
-        if (this.isAuthenticated()) {
-            var cred = this.token.credentials;
-            
-            const apigClient = newClient({
-                invokeUrl: BASE_URL,
-                region: AWS_REGION,
-                accessKey: cred.access_key,
-                secretKey: cred.secret_key,
-                sessionToken: cred.session_token
-            });
+        await this.authenticate();
+        var cred = this.token.credentials;
 
-            const { data } = await apigClient.invokeApi(
-                pathParams,
-                pathTemplate,
-                'GET',
-                {
-                    headers: BASE_HEADERS,
-                    queryParams: queryParams
-                },
-                {}
-            );
-            return data;
-        } else {
-            throw new Error('You need to init api first!');
-        }
+        const apigClient = newClient({
+            invokeUrl: BASE_URL,
+            region: AWS_REGION,
+            accessKey: cred.access_key,
+            secretKey: cred.secret_key,
+            sessionToken: cred.session_token
+        });
+
+        const { data } = await apigClient.invokeApi(
+            pathParams,
+            pathTemplate,
+            'GET',
+            {
+                headers: BASE_HEADERS,
+                queryParams: queryParams
+            },
+            {}
+        );
+        return data;
     };
 
-    isAuthenticated = async () => {
+    authenticate = async () => {
         if (this.token === '') {
-            return false;
+            await this.getToken();
         } else {
             // Check if expired and refresh if needed
-            const now = new Date().getTime();
-            const expire = Date.parse(this.token.credentials.expiration);
-            if (expire < now) {
+            const now = new Date().toISOString();
+            if (this.token.credentials.expiration < now) {
                 await this.getToken();
             }
-            return true;
         }
     };
 
@@ -126,7 +117,7 @@ export class BlueriiotAPI {
     };
     /**
      * DEPECREATED
-     * @param {String} swimming_pool_id 
+     * @param {String} swimming_pool_id
      * @returns {Object}
      */
     getSwimmingPoolStatus = async (swimming_pool_id) => {
@@ -150,7 +141,7 @@ export class BlueriiotAPI {
             swimming_pool_id: swimming_pool_id
         };
         var queryParams = {
-            language: language
+            lang: language
         };
         var pathTemplate = 'swimming_pool/{swimming_pool_id}/feed';
         return await this.getData(pathParams, pathTemplate, queryParams);
@@ -174,7 +165,7 @@ export class BlueriiotAPI {
             swimming_pool_id: swimming_pool_id
         };
         var queryParams = {
-            language: language,
+            lang: language,
             mode: 'interactive_v03'
         };
         var pathTemplate = 'swimming_pool/{swimming_pool_id}/guidance';
@@ -186,7 +177,7 @@ export class BlueriiotAPI {
             swimming_pool_id: swimming_pool_id
         };
         var queryParams = {
-            language: language
+            lang: language
         };
         var pathTemplate = 'swimming_pool/{swimming_pool_id}/guidance/history';
         return await this.getData(pathParams, pathTemplate, queryParams);
@@ -206,7 +197,7 @@ export class BlueriiotAPI {
             swimming_pool_id: swimming_pool_id
         };
         var queryParams = {
-            language: language
+            lang: language
         };
         var pathTemplate = 'swimming_pool/{swimming_pool_id}/weather';
         return await this.getData(pathParams, pathTemplate, queryParams);
